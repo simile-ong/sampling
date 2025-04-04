@@ -10,10 +10,70 @@ Modify the number of repetitions in the simulation to 100 (from the original 100
 
 Alter the code so that it is reproducible. Describe the changes you made to the code and how they affected the reproducibility of the script file. The output does not need to match Whitby’s original blogpost/graphs, it just needs to produce the same output when run multiple times
 
-# Author: YOUR NAME
+# Author: SIM ONG
 
 ```
-Please write your explanation here...
+IDENTIFYING STAGES OF SAMPLING
+
+Infect a random subset of people
+    Sampling procedure: Simple random sampling
+    Sampling frame: 1,000 people in a community, in a single time period
+    Sample size: 100 people
+
+    Functions used:
+        The choice() function is used to randomly select units in the sampling frame to infect with the specification that only 10% of the sampling frame is infected.
+        The int() function is nested within choice() to ensure that the number of randomly chosen units is an integer.
+        The len() function is nested within int() to refer to the number of rows of the ppl dataframe.
+
+    Underlying distribution: Deterministic allocation
+
+    Here, Whitby is creating his frame population with the supposition that "exactly 10% of people at every event are infected, regardless of the type of event."
+
+
+
+Primary contact tracing: randomly decide which infected people get traced
+    Sampling procedure: Simple random sampling
+    Sampling frame: 100 people in the community who are infected
+    Sample size: Less than 20 people
+
+    Functions used:
+        The rand() function is used to randomize the number of units in the sample with the specification that it is less than 20% of the sampling frame.
+        The sum() function is nested within rand() to specify that the number of units in the sample is the thing to be randomized.
+    
+    Underlying distributions: Bernoulli
+
+    Here, Whitby narrows his sampling frame. He supposes that "an infection has only a 20% chance of being traced to a source event" given that "contact-tracing is imperfect" due to factors like the inaccurate recall of infected people, etc.
+
+    
+
+Secondary contact tracing based on event attendance
+    Sampling procedure: Cluster sampling (one-stage)
+    Sampling frame: Set of events attended by set of the traced individuals
+    Sample size: Events with at least two traced individuals
+
+    Functions used:
+        The value_counts() function is used to count the frequency of the types of events attended by those in the sample.
+        The isin() method is then used to check the number of infected people who are traced in each cluster.
+
+    Underlying distribution: Depends on the previous stage of contact tracing
+
+    "If two infections are independently traced to the same source event, a special effort is made to test every person who attended that event, with the result that 100% of infections associated with that event are identified."
+
+
+
+COMPARING GRAPHS
+In the generated graph, the proportion of cases in "Infections from Weddings" (blue) seems to have a normal distribution. Most of the proportion of cases in "Traced to Weddings" (red) seems to be normally distributed with the exception of a number of cases falling in the 0.00-0.05 range.
+As such, the script generates a graph that is vaguely similar but not identical to the graph in the original blog post.
+
+After modifying the number of repetitions in the simulations to 100 and running the script multiple times, it's clear that the outputted graphs are different each run. As such, the script is not reproducible.
+
+
+
+MAKING THE CODE REPRODUCIBLE
+# Altering code to make it reproducible: Set the seed
+np.random.seed(123)
+    I used the np.random.seed() function to set the seed for generating the random numbers in the script. The results of my chosen seed value 123 are reproducible across multiple runs, and the graphs generated are identical to each other.
+
 
 ```
 
